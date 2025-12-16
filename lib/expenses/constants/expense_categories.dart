@@ -1,0 +1,18 @@
+const expenseCategories = <String>[
+  'Groceries',
+  'Vegetables',
+  'Fruits',
+  'Milk',
+  'Alcohol',
+  'Rent',
+  'Tuition',
+  'Utilities',
+  'Fuel',
+  'Healthcare',
+  'Dining Out',
+  'Entertainment',
+  'Travel',
+  'Gadgets',
+  'Subscriptions',
+  'Savings',
+];
