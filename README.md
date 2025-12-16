@@ -12,7 +12,7 @@ A Flutter finance companion with budgets, expenses, cards, accounts, and secure 
 - **UI polish**: Bottom navigation with Expenses as the default tab, overflow‑safe layouts, and refreshed add/edit dialogs.
 
 ## Requirements
-- Flutter 3.8+ and Dart 3.8+
+- Flutter 3.35+
 - Firebase project with Google Sign‑In enabled; update `google-services.json`/`GoogleService-Info.plist` accordingly.
 - Android/iOS tooling (Android Studio/Xcode) and a configured emulator/device.
 
