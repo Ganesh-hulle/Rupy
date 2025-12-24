@@ -3,13 +3,17 @@
 A Flutter finance companion with budgets, expenses, cards, accounts, and secure cloud sync.
 
 ## Features
-- **Expenses & Budgets**: Add/edit/delete expenses, set period budgets, plan future spend, and view monthly/yearly totals with category mix and 6‑month burn charts.
-- **Forex awareness**: EUR is the default currency; automatic rate fetch via Frankfurter API with EUR→INR badge and budget conversions.
-- **Export**: CSV export for expenses plus budget summary/future expenses (saves to Downloads on Android or Documents elsewhere).
-- **Cards & Accounts**: Manage cards and bank accounts with Firestore + SQLite cache, edit/delete actions, and optional card color customization with icon lookup from bundled bank data.
-- **Security**: Data is encrypted end‑to‑end using `EncryptionService` before sending to Firestore; app theme uses Material 3 with a reusable theme system.
-- **Auth**: Google Sign‑In with silent session restore, manual login, logout from the dashboard, and Firebase Auth integration.
-- **UI polish**: Bottom navigation with Expenses as the default tab, overflow‑safe layouts, and refreshed add/edit dialogs.
+- **Expenses & Budgets**: Add/edit/delete expenses, plan future spend, set period budgets, and view monthly/yearly analytics with category breakdowns.
+- **Cards**: Add/edit/delete cards, choose Visa/Mastercard logos, set billing day/grace days, usage limits, and view utilization.
+- **Card Payments**: Record partial/full payments and link them to accounts for clean ledgers.
+- **Accounts & Payment Sources**: Manage bank accounts and link expenses to cash, accounts, wallets, or cards.
+- **Notifications**: Local reminder testing, push reminders via Cloud Tasks + FCM, and test push tools in settings.
+- **Security**: App lock with device authentication and encrypted storage for sensitive fields.
+- **Auth**: Google Sign-In with silent restore, manual login, and Firebase Auth integration.
+- **Export**: CSV export for expenses plus budget summary and future expenses.
+- **Forex awareness**: Multi-currency handling with automatic FX rate fetch and budget conversions.
+- **UI/Theming**: Material 3, light/dark mode with contrast control, refreshed dashboards, and card UI polish.
+- **Offline-friendly**: Local SQLite cache for cards and bank data with Firestore sync.
 
 ## Requirements
 - Flutter 3.38+
@@ -215,4 +219,5 @@ This app uses a Cloud Tasks pipeline to send timezone-aware card reminder push n
 
 ## License
 MIT license.
+
 
