@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:morpheus/bills_calendar_page.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/expenses/models/expense.dart';
-import 'package:morpheus/utils/statement_dates.dart';
+import 'package:rupy/bills_calendar_page.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/expenses/models/expense.dart';
+import 'package:rupy/utils/statement_dates.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

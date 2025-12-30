@@ -7,13 +7,13 @@ import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/services/error_reporter.dart';
 
 class EncryptionService {
   static const String _legacyFallbackKey = 'YOUR_32_CHARACTER_LONG_KEY_HERE'; // 32 chars
   static const String _legacyFallbackIv = 'YOUR_16_CHARACTER_LONG_IV'; // 16 chars
-  static const String _keyStorageKey = 'morpheus.encryption.key';
-  static const String _ivStorageKey = 'morpheus.encryption.iv';
+  static const String _keyStorageKey = 'rupy.encryption.key';
+  static const String _ivStorageKey = 'rupy.encryption.iv';
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
   static String _keyValue = _legacyFallbackKey;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/accounts.dart';
-import 'package:morpheus/creditcard_management_page.dart';
-import 'package:morpheus/expenses/view/expense_dashboard_page.dart';
-import 'package:morpheus/settings/settings_page.dart';
+import 'package:rupy/accounts.dart';
+import 'package:rupy/creditcard_management_page.dart';
+import 'package:rupy/expenses/view/expense_dashboard_page.dart';
+import 'package:rupy/settings/settings_page.dart';
 
 /// Root shell that holds a Material 3 bottom NavigationBar and preserves
 /// each tab's state via an IndexedStack.

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:morpheus/banks/bank_repository.dart';
-import 'package:morpheus/banks/bank_search_cubit.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
-import 'package:morpheus/widgets/color_picker.dart';
+import 'package:rupy/banks/bank_repository.dart';
+import 'package:rupy/banks/bank_search_cubit.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/settings/settings_cubit.dart';
+import 'package:rupy/widgets/color_picker.dart';
 
 /// Dialog that lets users author a credit card and persists the selection
 /// via the parent page. Bank field is type-ahead (top 5 only) to keep the

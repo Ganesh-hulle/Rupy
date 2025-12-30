@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/theme/theme_contrast.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/theme/theme_contrast.dart';
 
 class SettingsState {
   final ThemeMode themeMode;

@@ -48,7 +48,7 @@ class ExportService {
       baseDir = await getApplicationDocumentsDirectory();
     }
 
-    final exportDir = Directory('${baseDir.path}/morpheus_exports');
+    final exportDir = Directory('${baseDir.path}/rupy_exports');
     if (!await exportDir.exists()) {
       await exportDir.create(recursive: true);
     }

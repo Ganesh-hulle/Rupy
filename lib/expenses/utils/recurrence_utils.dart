@@ -1,4 +1,4 @@
-import 'package:morpheus/expenses/models/recurrence_frequency.dart';
+import 'package:rupy/expenses/models/recurrence_frequency.dart';
 
 DateTime nextRecurrenceDate({
   required DateTime anchor,

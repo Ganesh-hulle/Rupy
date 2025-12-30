@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/cards/card_repository.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/services/notification_service.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/utils/error_mapper.dart';
+import 'package:rupy/cards/card_repository.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/services/notification_service.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/utils/error_mapper.dart';
 
 class CardState extends Equatable {
   final List<CreditCard> cards;

@@ -7,13 +7,13 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:morpheus/expenses/models/subscription.dart';
+import 'package:rupy/expenses/models/subscription.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/utils/statement_dates.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/utils/statement_dates.dart';
 
 /// Centralized notification pipeline that wires Firebase Cloud Messaging,
 /// local notifications, and scheduling for in-app reminders.
@@ -136,7 +136,7 @@ class NotificationService {
 
     final title = message.notification?.title ??
         message.data['title']?.toString() ??
-        'Morpheus';
+        'rupy';
     final body = message.notification?.body ??
         message.data['body']?.toString() ??
         'You have a new update';
@@ -341,7 +341,7 @@ class NotificationService {
   NotificationDetails _defaultDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
-        'morpheus_reminders',
+        'rupy_reminders',
         'Reminders',
         channelDescription: 'Card payment reminders and alerts',
         importance: Importance.max,
@@ -358,7 +358,7 @@ class NotificationService {
   NotificationDetails _subscriptionDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
-        'morpheus_subscriptions',
+        'rupy_subscriptions',
         'Subscriptions',
         channelDescription: 'Subscription renewal alerts',
         importance: Importance.max,

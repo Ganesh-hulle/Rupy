@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:morpheus/utils/statement_dates.dart';
+import 'package:rupy/utils/statement_dates.dart';
 
 DateTime dateTimeFromJson(Object? value) {
   if (value == null) return DateTime.now();

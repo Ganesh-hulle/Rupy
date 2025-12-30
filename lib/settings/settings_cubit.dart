@@ -4,14 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/cards/card_repository.dart';
-import 'package:morpheus/services/app_lock_service.dart';
-import 'package:morpheus/services/notification_service.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/settings/settings_repository.dart';
-import 'package:morpheus/settings/settings_state.dart';
-import 'package:morpheus/theme/theme_contrast.dart';
-import 'package:morpheus/utils/error_mapper.dart';
+import 'package:rupy/cards/card_repository.dart';
+import 'package:rupy/services/app_lock_service.dart';
+import 'package:rupy/services/notification_service.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/settings/settings_repository.dart';
+import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/theme/theme_contrast.dart';
+import 'package:rupy/utils/error_mapper.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({

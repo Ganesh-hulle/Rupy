@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/services/error_reporter.dart';
 
 class AppLockService {
   AppLockService({LocalAuthentication? auth})
@@ -24,7 +24,7 @@ class AppLockService {
     }
   }
 
-  Future<bool> authenticate({String reason = 'Unlock Morpheus'}) async {
+  Future<bool> authenticate({String reason = 'Unlock rupy'}) async {
     if (kIsWeb) return false;
     try {
       return await _auth.authenticate(

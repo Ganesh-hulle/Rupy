@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/services/http_client.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/services/http_client.dart';
 
 class ForexService {
   ForexService({HttpClientService? client})

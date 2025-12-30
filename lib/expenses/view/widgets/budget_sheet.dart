@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/expenses/models/budget.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/expenses/models/budget.dart';
+import 'package:rupy/settings/settings_cubit.dart';
 
 class BudgetSheet extends StatefulWidget {
   const BudgetSheet({super.key, this.existing});

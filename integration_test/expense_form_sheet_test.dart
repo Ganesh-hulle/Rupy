@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:morpheus/accounts/accounts_cubit.dart';
-import 'package:morpheus/accounts/models/account_credential.dart';
-import 'package:morpheus/cards/card_cubit.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/expenses/view/widgets/expense_form_sheet.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
-import 'package:morpheus/settings/settings_state.dart';
-import 'package:morpheus/theme/theme_contrast.dart';
+import 'package:rupy/accounts/accounts_cubit.dart';
+import 'package:rupy/accounts/models/account_credential.dart';
+import 'package:rupy/cards/card_cubit.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/expenses/view/widgets/expense_form_sheet.dart';
+import 'package:rupy/settings/settings_cubit.dart';
+import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/theme/theme_contrast.dart';
 
 class FakeSettingsCubit extends Cubit<SettingsState>
     implements SettingsCubit {

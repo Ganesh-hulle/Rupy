@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:morpheus/expenses/models/recurrence_frequency.dart';
-import 'package:morpheus/expenses/utils/recurrence_utils.dart';
-import 'package:morpheus/models/json_converters.dart';
+import 'package:rupy/expenses/models/recurrence_frequency.dart';
+import 'package:rupy/expenses/utils/recurrence_utils.dart';
+import 'package:rupy/models/json_converters.dart';
 import 'package:uuid/uuid.dart';
 
 part 'recurring_transaction.freezed.dart';

@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/categories/category_repository.dart';
-import 'package:morpheus/categories/expense_category.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/utils/error_mapper.dart';
+import 'package:rupy/categories/category_repository.dart';
+import 'package:rupy/categories/expense_category.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/utils/error_mapper.dart';
 
 class CategoryState extends Equatable {
   const CategoryState({

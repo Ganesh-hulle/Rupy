@@ -3,21 +3,21 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/auth/auth_bloc.dart';
-import 'package:morpheus/auth/auth_repository.dart';
-import 'package:morpheus/categories/category_cubit.dart';
-import 'package:morpheus/categories/category_repository.dart';
-import 'package:morpheus/navigation_bar.dart';
-import 'package:morpheus/services/auth_service.dart';
-import 'package:morpheus/services/encryption_service.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/services/notification_service.dart';
-import 'package:morpheus/splash_page.dart';
-import 'package:morpheus/lock/app_lock_gate.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
-import 'package:morpheus/settings/settings_repository.dart';
-import 'package:morpheus/settings/settings_state.dart';
-import 'package:morpheus/theme/app_theme.dart';
+import 'package:rupy/auth/auth_bloc.dart';
+import 'package:rupy/auth/auth_repository.dart';
+import 'package:rupy/categories/category_cubit.dart';
+import 'package:rupy/categories/category_repository.dart';
+import 'package:rupy/navigation_bar.dart';
+import 'package:rupy/services/auth_service.dart';
+import 'package:rupy/services/encryption_service.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/services/notification_service.dart';
+import 'package:rupy/splash_page.dart';
+import 'package:rupy/lock/app_lock_gate.dart';
+import 'package:rupy/settings/settings_cubit.dart';
+import 'package:rupy/settings/settings_repository.dart';
+import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/theme/app_theme.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'firebase_options.dart'; // created by flutterfire configure
@@ -52,7 +52,7 @@ Future<void> main() async {
   final authRepository = AuthRepository();
   final settingsRepository = SettingsRepository();
   final initialSettings = await settingsRepository.load();
-  final app = MorpheusApp(
+  final app = rupyApp(
     authRepository: authRepository,
     settingsRepository: settingsRepository,
     initialSettings: initialSettings,
@@ -76,8 +76,8 @@ Future<void> main() async {
   }
 }
 
-class MorpheusApp extends StatelessWidget {
-  const MorpheusApp({
+class rupyApp extends StatelessWidget {
+  const rupyApp({
     super.key,
     required this.authRepository,
     required this.settingsRepository,
@@ -105,7 +105,7 @@ class MorpheusApp extends StatelessWidget {
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, settings) {
             return MaterialApp(
-              title: 'Morpheus',
+              title: 'rupy',
               theme: AppTheme.light(
                 context,
                 contrast: settings.contrast,

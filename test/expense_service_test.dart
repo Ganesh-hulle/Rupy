@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:morpheus/expenses/models/budget.dart';
-import 'package:morpheus/expenses/models/expense.dart';
-import 'package:morpheus/expenses/services/expense_service.dart';
-import 'package:morpheus/services/forex_service.dart';
+import 'package:rupy/expenses/models/budget.dart';
+import 'package:rupy/expenses/models/expense.dart';
+import 'package:rupy/expenses/services/expense_service.dart';
+import 'package:rupy/services/forex_service.dart';
 
 class FakeForexService implements ForexService {
   FakeForexService(this.ratesByBase);

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/services/error_reporter.dart';
 
 /// Centralized auth utilities for Google + Firebase.
 class AuthService {

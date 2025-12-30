@@ -1,5 +1,5 @@
 {
-  "name": "morpheus-functions",
+  "name": "rupy-functions",
   "private": true,
   "engines": {
     "node": "22"

@@ -1,4 +1,4 @@
-import 'package:morpheus/data/banks_db.dart';
+import 'package:rupy/data/banks_db.dart';
 
 /// Thin abstraction over the bundled banks SQLite table so the UI can swap
 /// implementations (e.g., remote search) without touching widgets.

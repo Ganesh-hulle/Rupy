@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:morpheus/categories/category_cubit.dart';
-import 'package:morpheus/categories/expense_category.dart';
-import 'package:morpheus/expenses/models/planned_expense.dart';
+import 'package:rupy/categories/category_cubit.dart';
+import 'package:rupy/categories/expense_category.dart';
+import 'package:rupy/expenses/models/planned_expense.dart';
 
 class PlannedExpenseSheet extends StatefulWidget {
   const PlannedExpenseSheet({super.key});

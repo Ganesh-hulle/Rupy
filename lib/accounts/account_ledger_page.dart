@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:morpheus/accounts/models/account_credential.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/expenses/models/expense.dart';
-import 'package:morpheus/services/forex_service.dart';
+import 'package:rupy/accounts/models/account_credential.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/expenses/models/expense.dart';
+import 'package:rupy/services/forex_service.dart';
 
 class AccountLedgerPage extends StatelessWidget {
   const AccountLedgerPage({super.key, required this.account, required this.expenses});

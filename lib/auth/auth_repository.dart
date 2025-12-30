@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:morpheus/auth/auth_user.dart';
-import 'package:morpheus/services/auth_service.dart';
-import 'package:morpheus/services/notification_service.dart';
+import 'package:rupy/auth/auth_user.dart';
+import 'package:rupy/services/auth_service.dart';
+import 'package:rupy/services/notification_service.dart';
 
 /// Auth data access: fetches/refreshes tokens and exposes auth state changes.
 class AuthRepository {

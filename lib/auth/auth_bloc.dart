@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:morpheus/auth/auth_repository.dart';
-import 'package:morpheus/auth/auth_user.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/utils/error_mapper.dart';
+import 'package:rupy/auth/auth_repository.dart';
+import 'package:rupy/auth/auth_user.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/utils/error_mapper.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

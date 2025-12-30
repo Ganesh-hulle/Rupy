@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/settings/settings_state.dart';
-import 'package:morpheus/theme/theme_contrast.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/theme/theme_contrast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsRepository {

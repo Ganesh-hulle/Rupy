@@ -1,4 +1,4 @@
-package com.example.morpheus
+package com.example.rupy
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 

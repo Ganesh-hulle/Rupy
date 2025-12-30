@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/models/json_converters.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/models/json_converters.dart';
 
 part 'bill_item.freezed.dart';
 part 'bill_item.g.dart';

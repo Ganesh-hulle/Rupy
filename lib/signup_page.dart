@@ -2,8 +2,8 @@ import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:morpheus/services/auth_service.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/services/auth_service.dart';
+import 'package:rupy/services/error_reporter.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -120,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
           'If you\'re having trouble signing in:\n\n'
           '• Make sure you have a stable internet connection\n'
           '• Try clearing your browser cache\n'
-          '• Contact our support team at support@morpheus.app',
+          '• Contact our support team at support@rupy.app',
         ),
         actions: [
           TextButton(
@@ -189,7 +189,7 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
 
                               // Welcome Text
                               Text(
-                                'Welcome to Morpheus',
+                                'Welcome to rupy',
                                 style: theme.textTheme.headlineSmall?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: colorScheme.onSurface,

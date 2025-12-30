@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/expenses/models/subscription.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/expenses/models/subscription.dart';
+import 'package:rupy/services/error_reporter.dart';
 
 class NotificationService {
   NotificationService._internal();

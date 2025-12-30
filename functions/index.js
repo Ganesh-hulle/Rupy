@@ -17,7 +17,7 @@ admin.initializeApp();
 const db = admin.firestore();
 
 const DEFAULT_KEY = "2Ioz6tXZgE3jc5k1S6dKvRm6VteCEfKH";
-const DEFAULT_IV = "morpheus-iv-0001";
+const DEFAULT_IV = "rupy-iv-0001";
 const REGION = "europe-west1";
 const TASKS_QUEUE = "card-reminders";
 const TASKS_LOCATION = REGION;
@@ -705,7 +705,7 @@ exports.sendTestPush = onCall({ region: REGION }, async (request) => {
   const body =
     typeof data.body === "string" && data.body.trim().length > 0
       ? data.body.trim()
-      : "This is a test push from Morpheus.";
+      : "This is a test push from rupy.";
 
   const tokens = await getUserTokens(uid, new Map());
   if (tokens.length === 0) {

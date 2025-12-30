@@ -44,9 +44,9 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyAmu3ZlTCX6ULnNDxUblkJMssbUisSH5-k',
     appId: '1:842775331840:web:ef931c812d472f5100c4e5',
     messagingSenderId: '842775331840',
-    projectId: 'morpheus-334e6',
-    authDomain: 'morpheus-334e6.firebaseapp.com',
-    storageBucket: 'morpheus-334e6.firebasestorage.app',
+    projectId: 'rupy-6cfab',
+    authDomain: 'rupy-6cfab.firebaseapp.com',
+    storageBucket: 'rupy-6cfab.firebasestorage.app',
     measurementId: 'G-YPC75J215V',
   );
 
@@ -54,43 +54,43 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyC5VBEu4lnFOV9Wwr6dWdOgy-m5UXYElcU',
     appId: '1:842775331840:android:66da62adf93ccd0000c4e5',
     messagingSenderId: '842775331840',
-    projectId: 'morpheus-334e6',
-    storageBucket: 'morpheus-334e6.firebasestorage.app',
+    projectId: 'rupy-6cfab',
+    storageBucket: 'rupy-6cfab.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyARSItZ_AdziZs3JtSfZ9DxyvKZ9xCdT2w',
     appId: '1:842775331840:ios:c0b5a1fb17d5656900c4e5',
     messagingSenderId: '842775331840',
-    projectId: 'morpheus-334e6',
-    storageBucket: 'morpheus-334e6.firebasestorage.app',
+    projectId: 'rupy-6cfab',
+    storageBucket: 'rupy-6cfab.firebasestorage.app',
     androidClientId:
         '842775331840-mqkeg9of6v64284ctemuejh4do7aajai.apps.googleusercontent.com',
     iosClientId:
         '842775331840-vom74nr61km2rdetvu1bkt3kv30pha5a.apps.googleusercontent.com',
-    iosBundleId: 'com.example.morpheus',
+    iosBundleId: 'com.example.rupy',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyARSItZ_AdziZs3JtSfZ9DxyvKZ9xCdT2w',
     appId: '1:842775331840:ios:c0b5a1fb17d5656900c4e5',
     messagingSenderId: '842775331840',
-    projectId: 'morpheus-334e6',
-    storageBucket: 'morpheus-334e6.firebasestorage.app',
+    projectId: 'rupy-6cfab',
+    storageBucket: 'rupy-6cfab.firebasestorage.app',
     androidClientId:
         '842775331840-mqkeg9of6v64284ctemuejh4do7aajai.apps.googleusercontent.com',
     iosClientId:
         '842775331840-vom74nr61km2rdetvu1bkt3kv30pha5a.apps.googleusercontent.com',
-    iosBundleId: 'com.example.morpheus',
+    iosBundleId: 'com.example.rupy',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyAmu3ZlTCX6ULnNDxUblkJMssbUisSH5-k',
     appId: '1:842775331840:web:8bc1dd4fe957557e00c4e5',
     messagingSenderId: '842775331840',
-    projectId: 'morpheus-334e6',
-    authDomain: 'morpheus-334e6.firebaseapp.com',
-    storageBucket: 'morpheus-334e6.firebasestorage.app',
+    projectId: 'rupy-6cfab',
+    authDomain: 'rupy-6cfab.firebaseapp.com',
+    storageBucket: 'rupy-6cfab.firebasestorage.app',
     measurementId: 'G-DC7VQ2C51M',
   );
 }

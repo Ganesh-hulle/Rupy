@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:morpheus/models/json_converters.dart';
-import 'package:morpheus/utils/statement_dates.dart';
+import 'package:rupy/models/json_converters.dart';
+import 'package:rupy/utils/statement_dates.dart';
 
 part 'card_spend_stats.freezed.dart';
 part 'card_spend_stats.g.dart';

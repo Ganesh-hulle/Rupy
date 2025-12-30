@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/accounts/accounts_repository.dart';
-import 'package:morpheus/accounts/models/account_credential.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/utils/error_mapper.dart';
+import 'package:rupy/accounts/accounts_repository.dart';
+import 'package:rupy/accounts/models/account_credential.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/utils/error_mapper.dart';
 
 class AccountsState extends Equatable {
   const AccountsState({

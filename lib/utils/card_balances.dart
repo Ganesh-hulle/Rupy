@@ -1,6 +1,6 @@
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/expenses/models/expense.dart';
-import 'package:morpheus/utils/statement_dates.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/expenses/models/expense.dart';
+import 'package:rupy/utils/statement_dates.dart';
 
 class CardBalance {
   CardBalance({

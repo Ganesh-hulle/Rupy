@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/expenses/models/expense.dart';
-import 'package:morpheus/services/forex_service.dart';
-import 'package:morpheus/utils/card_balances.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/expenses/models/expense.dart';
+import 'package:rupy/services/forex_service.dart';
+import 'package:rupy/utils/card_balances.dart';
 
 class CardLedgerPage extends StatelessWidget {
   const CardLedgerPage({super.key, required this.card, required this.expenses, required this.baseCurrency});

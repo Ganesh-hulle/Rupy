@@ -1,5 +1,5 @@
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/expenses/models/expense.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/expenses/models/expense.dart';
 
 double amountInDisplayCurrency(
   Expense expense,

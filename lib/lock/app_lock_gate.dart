@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:morpheus/services/app_lock_service.dart';
+import 'package:rupy/services/app_lock_service.dart';
 
 class AppLockGate extends StatefulWidget {
   const AppLockGate({

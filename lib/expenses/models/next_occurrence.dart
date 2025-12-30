@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:morpheus/expenses/models/recurring_transaction.dart';
-import 'package:morpheus/expenses/models/subscription.dart';
+import 'package:rupy/expenses/models/recurring_transaction.dart';
+import 'package:rupy/expenses/models/subscription.dart';
 
 part 'next_occurrence.freezed.dart';
 

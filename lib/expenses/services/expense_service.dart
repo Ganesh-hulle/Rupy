@@ -1,9 +1,9 @@
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/expenses/models/budget.dart';
-import 'package:morpheus/expenses/models/expense.dart';
-import 'package:morpheus/expenses/repositories/expense_repository.dart';
-import 'package:morpheus/services/forex_service.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/expenses/models/budget.dart';
+import 'package:rupy/expenses/models/expense.dart';
+import 'package:rupy/expenses/repositories/expense_repository.dart';
+import 'package:rupy/services/forex_service.dart';
+import 'package:rupy/services/error_reporter.dart';
 
 class ExpenseService {
   ExpenseService({ExpenseRepository? repository, ForexService? forexService})

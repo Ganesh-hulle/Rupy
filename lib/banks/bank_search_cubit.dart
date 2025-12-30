@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/banks/bank_repository.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/utils/error_mapper.dart';
+import 'package:rupy/banks/bank_repository.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/utils/error_mapper.dart';
 
 class BankSearchState {
   final String query;

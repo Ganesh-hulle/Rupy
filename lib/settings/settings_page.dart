@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/auth/auth_bloc.dart';
-import 'package:morpheus/categories/category_cubit.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
-import 'package:morpheus/settings/settings_state.dart';
-import 'package:morpheus/theme/theme_contrast.dart';
-import 'package:morpheus/services/error_reporter.dart';
+import 'package:rupy/auth/auth_bloc.dart';
+import 'package:rupy/categories/category_cubit.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/settings/settings_cubit.dart';
+import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/theme/theme_contrast.dart';
+import 'package:rupy/services/error_reporter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -217,13 +217,13 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.info_outline),
-                    title: const Text('About Morpheus'),
+                    title: const Text('About rupy'),
                     onTap: () {
                       final theme = Theme.of(context);
-                      final repoUrl = Uri.parse('https://github.com/ShubhamGhanmode/Morpheus');
+                      final repoUrl = Uri.parse('https://github.com/ShubhamGhanmode/rupy');
                       showAboutDialog(
                         context: context,
-                        applicationName: 'Morpheus',
+                        applicationName: 'rupy',
                         applicationVersion: '1.0.0',
                         children: [
                           const SizedBox(height: 8),
@@ -261,7 +261,7 @@ class SettingsPage extends StatelessWidget {
                                         SizedBox(width: 8),
                                         Expanded(
                                           child: Text(
-                                            'github.com/ShubhamGhanmode/Morpheus',
+                                            'github.com/ShubhamGhanmode/rupy',
                                             style: theme.textTheme.bodyMedium?.copyWith(
                                               color: theme.colorScheme.primary,
                                               fontWeight: FontWeight.w600,

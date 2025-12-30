@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:morpheus/accounts/models/account_credential.dart';
-import 'package:morpheus/services/error_reporter.dart';
-import 'package:morpheus/services/encryption_service.dart';
+import 'package:rupy/accounts/models/account_credential.dart';
+import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/services/encryption_service.dart';
 
 class AccountsRepository {
   AccountsRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})

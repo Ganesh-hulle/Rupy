@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:morpheus/expenses/models/expense.dart';
+import 'package:rupy/expenses/models/expense.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/accounts/accounts_cubit.dart';
-import 'package:morpheus/accounts/models/account_credential.dart';
-import 'package:morpheus/cards/card_cubit.dart';
-import 'package:morpheus/categories/category_cubit.dart';
-import 'package:morpheus/categories/expense_category.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/cards/models/credit_card.dart';
-import 'package:morpheus/expenses/bloc/expense_bloc.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
-import 'package:morpheus/utils/card_balances.dart';
+import 'package:rupy/accounts/accounts_cubit.dart';
+import 'package:rupy/accounts/models/account_credential.dart';
+import 'package:rupy/cards/card_cubit.dart';
+import 'package:rupy/categories/category_cubit.dart';
+import 'package:rupy/categories/expense_category.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/cards/models/credit_card.dart';
+import 'package:rupy/expenses/bloc/expense_bloc.dart';
+import 'package:rupy/settings/settings_cubit.dart';
+import 'package:rupy/utils/card_balances.dart';
 
 class ExpenseFormSheet extends StatefulWidget {
   const ExpenseFormSheet({super.key, this.existing});

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "973052750076",
+    "project_id": "rupy-6cfab",
+    "storage_bucket": "rupy-6cfab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973052750076:android:5f4e0a580989b089f38f79",
+        "android_client_info": {
+          "package_name": "com.example.rupy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO6eznC_jAXELna84_gbq2ZiQ0nWv3WIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

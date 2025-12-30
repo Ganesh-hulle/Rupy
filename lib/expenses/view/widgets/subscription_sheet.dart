@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/categories/category_cubit.dart';
-import 'package:morpheus/categories/expense_category.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/expenses/models/recurrence_frequency.dart';
-import 'package:morpheus/expenses/models/subscription.dart';
+import 'package:rupy/categories/category_cubit.dart';
+import 'package:rupy/categories/expense_category.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/expenses/models/recurrence_frequency.dart';
+import 'package:rupy/expenses/models/subscription.dart';
 
 class SubscriptionSheet extends StatefulWidget {
   const SubscriptionSheet({

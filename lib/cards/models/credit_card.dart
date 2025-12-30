@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/material.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/models/json_converters.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/models/json_converters.dart';
 
 part 'credit_card.freezed.dart';
 part 'credit_card.g.dart';

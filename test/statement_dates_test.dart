@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:morpheus/utils/statement_dates.dart';
+import 'package:rupy/utils/statement_dates.dart';
 
 void main() {
   group('statement dates', () {

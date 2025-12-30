@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:morpheus/models/json_converters.dart';
+import 'package:rupy/models/json_converters.dart';
 
 part 'card_payment_draft.freezed.dart';
 part 'card_payment_draft.g.dart';

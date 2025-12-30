@@ -1,5 +1,5 @@
 // lib/database/database_helper.dart
-import 'package:morpheus/config/app_config.dart';
+import 'package:rupy/config/app_config.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -17,7 +17,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'morpheus.db');
+    String path = join(await getDatabasesPath(), 'rupy.db');
     return await openDatabase(
       path,
       version: 4,

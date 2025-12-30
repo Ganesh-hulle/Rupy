@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:morpheus/accounts/models/account_credential.dart';
-import 'package:morpheus/banks/bank_repository.dart';
-import 'package:morpheus/banks/bank_search_cubit.dart';
-import 'package:morpheus/config/app_config.dart';
-import 'package:morpheus/settings/settings_cubit.dart';
-import 'package:morpheus/widgets/color_picker.dart';
+import 'package:rupy/accounts/models/account_credential.dart';
+import 'package:rupy/banks/bank_repository.dart';
+import 'package:rupy/banks/bank_search_cubit.dart';
+import 'package:rupy/config/app_config.dart';
+import 'package:rupy/settings/settings_cubit.dart';
+import 'package:rupy/widgets/color_picker.dart';
 
 class AccountFormSheet extends StatefulWidget {
   const AccountFormSheet({super.key, this.existing});
