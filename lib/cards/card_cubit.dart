@@ -40,7 +40,7 @@ class CardCubit extends Cubit<CardState> {
       emit(state.copyWith(cards: cards, loading: false));
       await _notifications.scheduleCardReminders(cards);
     } catch (e, stack) {
-      await ErrorReporter.recordError(e, stack, reason: 'Load cards failed');
+      await ErrorReporter.recordError(e, stack, reason: 'Load cards failed!!');
       emit(
         state.copyWith(
           loading: false,
