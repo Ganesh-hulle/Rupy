@@ -70,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
         reason: 'Google sign-in failed',
       );
       dev.log(
-        'GoogleSignInException: ${e.code}',
+        'GoogleSignInException: ${e.description}',
         name: 'auth',
         error: e.description,
         stackTrace: st,
