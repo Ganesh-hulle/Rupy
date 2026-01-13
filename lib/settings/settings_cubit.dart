@@ -11,6 +11,7 @@ import 'package:rupy/services/error_reporter.dart';
 import 'package:rupy/settings/settings_repository.dart';
 import 'package:rupy/settings/settings_state.dart';
 import 'package:rupy/theme/theme_contrast.dart';
+import 'package:rupy/services/firestore_config.dart';
 import 'package:rupy/utils/error_mapper.dart';
 
 class SettingsCubit extends Cubit<SettingsState> {
@@ -33,7 +34,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   final AppLockService _appLockService;
   final NotificationService _notificationService;
   final CardRepository _cardRepository;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = RupyFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void setThemeMode(ThemeMode mode) {

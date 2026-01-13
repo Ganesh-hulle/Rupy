@@ -13,6 +13,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rupy/cards/models/credit_card.dart';
 import 'package:rupy/services/error_reporter.dart';
+import 'package:rupy/services/firestore_config.dart';
 import 'package:rupy/utils/statement_dates.dart';
 
 /// Centralized notification pipeline that wires Firebase Cloud Messaging,
@@ -83,7 +84,7 @@ class NotificationService {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
     try {
-      await FirebaseFirestore.instance
+      await RupyFirestore.instance
           .collection('users')
           .doc(uid)
           .set(
@@ -433,7 +434,7 @@ class NotificationService {
     if (uid == null) return;
     try {
       final platforms = Platform.operatingSystem;
-      final col = FirebaseFirestore.instance
+      final col = RupyFirestore.instance
           .collection('users')
           .doc(uid)
           .collection('deviceTokens');
@@ -457,7 +458,7 @@ class NotificationService {
     try {
       final token = await FirebaseMessaging.instance.getToken();
       if (token == null || token.isEmpty) return;
-      await FirebaseFirestore.instance
+      await RupyFirestore.instance
           .collection('users')
           .doc(uid)
           .collection('deviceTokens')

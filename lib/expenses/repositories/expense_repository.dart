@@ -5,10 +5,11 @@ import 'package:rupy/expenses/models/expense.dart';
 import 'package:rupy/expenses/models/planned_expense.dart';
 import 'package:rupy/expenses/models/recurring_transaction.dart';
 import 'package:rupy/expenses/models/subscription.dart';
+import 'package:rupy/services/firestore_config.dart';
 
 class ExpenseRepository {
   ExpenseRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
-    : _firestore = firestore ?? FirebaseFirestore.instance,
+    : _firestore = firestore ?? RupyFirestore.instance,
       _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseFirestore _firestore;

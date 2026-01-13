@@ -22,8 +22,7 @@ class AuthService {
     // Initialize the singleton with optional parameters.
     await GoogleSignIn.instance.initialize(
       clientId: clientId,
-      serverClientId:
-          "842775331840-gsso7qkcb8mmi0sj97b63upejevbku48.apps.googleusercontent.com",
+      serverClientId: serverClientId,
       hostedDomain: hostedDomain,
       nonce: nonce,
     );

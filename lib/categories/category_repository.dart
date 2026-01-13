@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rupy/categories/expense_category.dart';
 import 'package:rupy/config/app_config.dart';
+import 'package:rupy/services/firestore_config.dart';
 
 class CategoryRepository {
   CategoryRepository({FirebaseFirestore? firestore, FirebaseAuth? auth})
-      : _firestore = firestore ?? FirebaseFirestore.instance,
+      : _firestore = firestore ?? RupyFirestore.instance,
         _auth = auth ?? FirebaseAuth.instance;
 
   final FirebaseFirestore _firestore;

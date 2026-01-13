@@ -42,8 +42,7 @@ Future<void> main() async {
   }
   await EncryptionService.initialize();
   await AuthService.initializeGoogle(
-    serverClientId:
-        "842775331840-gsso7qkcb8mmi0sj97b63upejevbku48.apps.googleusercontent.com",
+
     clientId:
         (defaultTargetPlatform == TargetPlatform.iOS ||
                 defaultTargetPlatform == TargetPlatform.macOS)

@@ -6,6 +6,7 @@ import 'package:rupy/cards/models/credit_card.dart';
 import 'package:rupy/database/database_helper.dart' show DatabaseHelper;
 import 'package:rupy/services/error_reporter.dart';
 import 'package:rupy/services/encryption_service.dart';
+import 'package:rupy/services/firestore_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,7 +16,7 @@ class CardRepository {
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
     DatabaseHelper? databaseHelper,
-  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+  }) : _firestore = firestore ?? RupyFirestore.instance,
        _auth = auth ?? FirebaseAuth.instance,
        _dbHelper = databaseHelper ?? DatabaseHelper();
 
