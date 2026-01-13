@@ -2,16 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:rupy/expenses/models/expense.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rupy/accounts/accounts_cubit.dart';
-import 'package:rupy/accounts/models/account_credential.dart';
-import 'package:rupy/cards/card_cubit.dart';
 import 'package:rupy/categories/category_cubit.dart';
 import 'package:rupy/categories/expense_category.dart';
-import 'package:rupy/config/app_config.dart';
-import 'package:rupy/cards/models/credit_card.dart';
 import 'package:rupy/expenses/bloc/expense_bloc.dart';
-import 'package:rupy/settings/settings_cubit.dart';
-import 'package:rupy/utils/card_balances.dart';
 
 class ExpenseFormSheet extends StatefulWidget {
   const ExpenseFormSheet({super.key, this.existing});
@@ -26,14 +19,11 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleCtrl;
   late final TextEditingController _amountCtrl;
-  late final TextEditingController _noteCtrl;
-  late final TextEditingController _sourceIdCtrl;
-  late String _currency;
+  final FocusNode _titleFocus = FocusNode();
   late String _category;
   late DateTime _date;
-  late String _paymentSourceType;
-  String? _paymentSourceId;
   late String _transactionType;
+  List<String> _suggestions = [];
 
   @override
   void initState() {
@@ -44,24 +34,41 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
           ? widget.existing!.amount.toStringAsFixed(2)
           : '',
     );
-    _noteCtrl = TextEditingController(text: widget.existing?.note ?? '');
-    _currency = 'INR';
     _category = widget.existing?.category ?? '';
     _date = widget.existing?.date ?? DateTime.now();
-    _paymentSourceType = widget.existing?.paymentSourceType ?? 'cash';
-    _paymentSourceId = widget.existing?.paymentSourceId;
     _transactionType = widget.existing?.transactionType ?? 'spend';
-    _sourceIdCtrl = TextEditingController(text: widget.existing?.paymentSourceId ?? '');
     _amountCtrl.addListener(_onAmountChanged);
+    _titleFocus.addListener(_onFocusChange);
+    _calculateSuggestions();
+  }
+
+  void _calculateSuggestions() {
+    final expenses = context.read<ExpenseBloc>().state.expenses;
+    final frequency = <String, int>{};
+    for (final e in expenses) {
+      final title = e.title.trim();
+      if (title.isNotEmpty) {
+        frequency[title] = (frequency[title] ?? 0) + 1;
+      }
+    }
+    final sorted = frequency.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    setState(() {
+      _suggestions = sorted.take(3).map((e) => e.key).toList();
+    });
+  }
+
+  void _onFocusChange() {
+    setState(() {});
   }
 
   @override
   void dispose() {
     _amountCtrl.removeListener(_onAmountChanged);
+    _titleFocus.removeListener(_onFocusChange);
     _titleCtrl.dispose();
     _amountCtrl.dispose();
-    _noteCtrl.dispose();
-    _sourceIdCtrl.dispose();
+    _titleFocus.dispose();
     super.dispose();
   }
 
@@ -106,40 +113,37 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _titleCtrl,
+                focusNode: _titleFocus,
                 decoration: const InputDecoration(
                   labelText: 'Item / description',
                 ),
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
               ),
+              if (_titleFocus.hasFocus && _suggestions.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  children: _suggestions.map((s) {
+                    return ActionChip(
+                      label: Text(s),
+                      onPressed: () => _applySuggestion(s),
+                      visualDensity: VisualDensity.compact,
+                    );
+                  }).toList(),
+                ),
+              ],
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: TextFormField(
-                      controller: _amountCtrl,
-                      decoration: const InputDecoration(labelText: 'Amount'),
-                      keyboardType: TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      validator: (v) {
-                        final parsed = double.tryParse(v ?? '');
-                        if (parsed == null || parsed <= 0)
-                          return 'Enter amount';
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  // Currency forced to INR
-                  Expanded(
-                    child: TextFormField(
-                      initialValue: 'INR',
-                      readOnly: true,
-                      decoration: const InputDecoration(labelText: 'Currency'),
-                    ),
-                  ),
-                ],
+              TextFormField(
+                controller: _amountCtrl,
+                decoration: const InputDecoration(labelText: 'Amount'),
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                validator: (v) {
+                  final parsed = double.tryParse(v ?? '');
+                  if (parsed == null || parsed <= 0) return 'Enter amount';
+                  return null;
+                },
               ),
               const SizedBox(height: 10),
               if (categories.isEmpty)
@@ -175,21 +179,12 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
               const SizedBox(height: 10),
               _buildTransactionType(),
               const SizedBox(height: 10),
-              _buildPaymentSourceSection(context),
-              const SizedBox(height: 10),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: const Text('Date'),
                 subtitle: Text(DateFormat.yMMMd().format(_date)),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: _pickDate,
-              ),
-              TextFormField(
-                controller: _noteCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Notes (optional)',
-                ),
-                maxLines: 2,
               ),
               const SizedBox(height: 14),
               Row(
@@ -213,278 +208,18 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
     );
   }
 
-  Widget _buildPaymentSourceSection(BuildContext context) {
-    final amount = _parsedAmount();
-    final expenses = _effectiveExpenses(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DropdownButtonFormField<String>(
-          key: const Key('expense_payment_source_dropdown'),
-          value: _paymentSourceType,
-          decoration: const InputDecoration(labelText: 'Paid via'),
-          items: const [
-            DropdownMenuItem(value: 'cash', child: Text('Cash')),
-            DropdownMenuItem(value: 'card', child: Text('Card')),
-            DropdownMenuItem(value: 'account', child: Text('Bank account')),
-            DropdownMenuItem(value: 'wallet', child: Text('Wallet / UPI')),
-          ],
-          onChanged: (value) {
-            if (value == null) return;
-            setState(() {
-              _paymentSourceType = value;
-              if (value == 'cash') {
-                _paymentSourceId = null;
-                _sourceIdCtrl.text = '';
-              }
-            });
-          },
-        ),
-        const SizedBox(height: 10),
-        if (_paymentSourceType == 'card')
-          BlocBuilder<CardCubit, CardState>(
-            builder: (context, state) {
-              final cards = state.cards;
-              final availability = {
-                for (final c in cards) c.id: _cardAvailable(c, expenses),
-              };
-              final hasSelection = cards.any((c) => c.id == _paymentSourceId);
-              final value = hasSelection ? _paymentSourceId : null;
-              final theme = Theme.of(context);
-              final items = cards
-                  .map(
-                    (c) {
-                      final available = availability[c.id];
-                      return DropdownMenuItem<String>(
-                        value: c.id,
-                        enabled: amount == null ||
-                            available == null ||
-                            available >= amount ||
-                            c.id == _paymentSourceId,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${c.bankName} • ${_maskCard(c.cardNumber)}',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (available != null) ...[
-                              const SizedBox(width: 8),
-                              Text(
-                                NumberFormat.simpleCurrency(
-                                  name: c.currency.isNotEmpty
-                                      ? c.currency
-                                      : _currency,
-                                ).format(available),
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: (amount != null && available < amount)
-                                      ? theme.colorScheme.error
-                                      : theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      );
-                    },
-                  )
-                  .toList();
-              if (!hasSelection && _paymentSourceId != null) {
-                items.add(
-                  DropdownMenuItem(
-                    value: _paymentSourceId,
-                    child: Text('Linked to ${_paymentSourceId}'),
-                  ),
-                );
-              }
-              return DropdownButtonFormField<String>(
-                key: const Key('expense_card_dropdown'),
-                isExpanded: true,
-                value: value,
-                items: items,
-                decoration: InputDecoration(
-                  labelText: 'Select card',
-                  suffixIcon: state.loading
-                      ? const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
-                      : null,
-                ),
-                validator: (v) {
-                  if (_paymentSourceType == 'card' &&
-                      (v == null || v.isEmpty)) {
-                    return 'Choose a card';
-                  }
-                  if (_paymentSourceType == 'card' &&
-                      v != null &&
-                      amount != null &&
-                      availability[v] != null &&
-                      (availability[v] ?? 0) < amount) {
-                    return 'Insufficient available limit';
-                  }
-                  return null;
-                },
-                onChanged: (v) {
-                  setState(() {
-                    _paymentSourceId = v;
-                    final card = cards.firstWhere(
-                      (c) => c.id == v,
-                      orElse: () => cards.first,
-                    );
-                    _currency = card.currency;
-                  });
-                },
-              );
-            },
-          )
-        else if (_paymentSourceType == 'account')
-          BlocBuilder<AccountsCubit, AccountsState>(
-            builder: (context, state) {
-              final accounts = state.items;
-              final availability = {
-                for (final a in accounts) a.id: _accountAvailable(a, expenses),
-              };
-              final hasSelection =
-                  accounts.any((a) => a.id == _paymentSourceId);
-              if (accounts.isEmpty) {
-                return TextFormField(
-                  controller: _sourceIdCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Account label',
-                    helperText: 'Enter bank / account name',
-                  ),
-                  validator: (v) {
-                    if (_paymentSourceType == 'account' &&
-                        (v == null || v.trim().isEmpty)) {
-                      return 'Enter an account';
-                    }
-                    return null;
-                  },
-                  onChanged: (v) => _paymentSourceId = v.trim(),
-                );
-              }
-              final items = accounts
-                  .map(
-                    (a) {
-                      final available = availability[a.id];
-                      return DropdownMenuItem<String>(
-                        value: a.id,
-                        enabled: amount == null ||
-                            available == null ||
-                            available >= amount ||
-                            a.id == _paymentSourceId,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${a.bankName} (${a.username})',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (available != null) ...[
-                              const SizedBox(width: 8),
-                              Text(
-                                NumberFormat.simpleCurrency(
-                                  name: a.currency,
-                                ).format(available),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                      color: (amount != null &&
-                                              available < amount)
-                                          ? Theme.of(context).colorScheme.error
-                                          : Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
-                                    ),
-                              ),
-                            ],
-                          ],
-                        ),
-                      );
-                    },
-                  )
-                  .toList();
-              if (!hasSelection && _paymentSourceId != null) {
-                items.add(
-                  DropdownMenuItem(
-                    value: _paymentSourceId,
-                    child: Text('Linked to ${_paymentSourceId}'),
-                  ),
-                );
-              }
-              return DropdownButtonFormField<String>(
-                key: const Key('expense_account_dropdown'),
-                isExpanded: true,
-                value: hasSelection ? _paymentSourceId : null,
-                items: items,
-                onChanged: (v) {
-                  setState(() {
-                    _paymentSourceId = v;
-                    _sourceIdCtrl.text = v ?? '';
-                    final acct = accounts.firstWhere(
-                      (a) => a.id == v,
-                      orElse: () => accounts.first,
-                    );
-                    _currency = acct.currency;
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'Linked account',
-                  suffixIcon: state.loading
-                      ? const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
-                      : null,
-                ),
-                validator: (v) {
-                  if (_paymentSourceType == 'account' &&
-                      (v == null || v.isEmpty)) {
-                    return 'Choose an account';
-                  }
-                  if (_paymentSourceType == 'account' &&
-                      v != null &&
-                      amount != null &&
-                      (availability[v] ?? 0) < amount) {
-                    return 'Insufficient account balance';
-                  }
-                  return null;
-                },
-              );
-            },
-          )
-        else if (_paymentSourceType == 'wallet')
-          TextFormField(
-            controller: _sourceIdCtrl,
-            decoration: const InputDecoration(
-              labelText: 'Wallet / handle',
-              helperText: 'e.g., GPay, Paytm, Revolut handle',
-            ),
-            validator: (v) {
-              if (_paymentSourceType == 'wallet' &&
-                  (v == null || v.trim().isEmpty)) {
-                return 'Enter a wallet or handle';
-              }
-              return null;
-            },
-            onChanged: (v) => _paymentSourceId = v.trim(),
-          )
-        else
-          const Text('Marked as cash'),
-      ],
-    );
+  void _applySuggestion(String title) {
+    _titleCtrl.text = title;
+    final expenses = context.read<ExpenseBloc>().state.expenses;
+    // Find most recent category for this title
+    try {
+      final match = expenses.firstWhere(
+        (e) => e.title.toLowerCase() == title.toLowerCase(),
+      );
+      setState(() {
+        _category = match.category;
+      });
+    } catch (_) {}
   }
 
   Widget _buildTransactionType() {
@@ -510,54 +245,6 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
   void _onAmountChanged() {
     if (!mounted) return;
     setState(() {});
-  }
-
-  double? _parsedAmount() {
-    final raw = _amountCtrl.text.trim();
-    if (raw.isEmpty) return null;
-    return double.tryParse(raw);
-  }
-
-  List<Expense> _effectiveExpenses(BuildContext context) {
-    final all = context.read<ExpenseBloc>().state.expenses;
-    final existingId = widget.existing?.id;
-    if (existingId == null) return all;
-    return all.where((e) => e.id != existingId).toList();
-  }
-
-  double _accountAvailable(
-    AccountCredential acct,
-    List<Expense> expenses,
-  ) {
-    final total = expenses
-        .where((e) =>
-            e.paymentSourceType.toLowerCase() == 'account' &&
-            e.paymentSourceId == acct.id)
-        .fold<double>(0, (sum, e) => sum + e.amountForCurrency(acct.currency));
-    return acct.balance - total;
-  }
-
-  double? _cardAvailable(
-    CreditCard card,
-    List<Expense> expenses,
-  ) {
-    final limit = card.usageLimit;
-    if (limit == null) return null;
-    final currency = card.currency.isNotEmpty
-        ? card.currency
-        : context.read<SettingsCubit>().state.baseCurrency;
-    final stats = computeCardBalance(
-      expenses: expenses,
-      card: card,
-      currency: currency,
-    );
-    return limit - stats.totalBalance;
-  }
-
-  String _maskCard(String number) {
-    final digits = number.replaceAll(RegExp(r'\\D'), '');
-    if (digits.length < 4) return digits;
-    return '**** ${digits.substring(digits.length - 4)}';
   }
 
   List<DropdownMenuItem<String>> _categoryItems(
@@ -596,27 +283,26 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
       );
       return;
     }
-    final note = _noteCtrl.text.trim();
+    
+    // Defaults
+    const defaultCurrency = 'INR';
+    const defaultPaymentSourceType = 'cash';
+    final defaultPaymentSourceId = null;
+
     final expense = Expense.create(
       id: widget.existing?.id,
       title: _titleCtrl.text.trim(),
       amount: double.parse(_amountCtrl.text.trim()),
-      currency: _currency,
+      currency: defaultCurrency,
       category: _category,
       date: _date,
-      note: note.isEmpty ? null : note,
+      note: null, // Note removed
       amountEur: widget.existing?.amountEur,
       budgetCurrency: widget.existing?.budgetCurrency,
       budgetRate: widget.existing?.budgetRate,
       amountInBudgetCurrency: widget.existing?.amountInBudgetCurrency,
-      paymentSourceType: _paymentSourceType.toLowerCase(),
-      paymentSourceId: _paymentSourceType == 'cash'
-          ? null
-          : _paymentSourceType == 'wallet'
-          ? _sourceIdCtrl.text.trim()
-          : _paymentSourceType == 'account'
-          ? (_paymentSourceId ?? _sourceIdCtrl.text.trim())
-          : _paymentSourceId,
+      paymentSourceType: defaultPaymentSourceType,
+      paymentSourceId: defaultPaymentSourceId,
       transactionType: _transactionType.toLowerCase(),
     );
     Navigator.of(context).pop(expense);

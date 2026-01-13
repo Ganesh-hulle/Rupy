@@ -32,6 +32,7 @@ import 'package:rupy/cards/models/credit_card.dart';
 import 'package:rupy/config/app_config.dart';
 import 'package:rupy/settings/settings_cubit.dart';
 import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/settings/models/dashboard_widget_type.dart';
 import 'package:rupy/utils/card_balances.dart';
 import 'package:rupy/utils/error_mapper.dart';
 
@@ -151,21 +152,19 @@ class _ExpenseDashboardView extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
+            final settingsState = context.watch<SettingsCubit>().state;
             final cardState = context.watch<CardCubit>().state;
             final accountState = context.watch<AccountsCubit>().state;
 
-            return RefreshIndicator(
-              onRefresh: () => refreshAll(),
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
-                children: [
-                  // _ForexBadge removed
-                  const SizedBox(height: 12),
-                  const SizedBox(height: 12),
-                  _MetricsRow(state: state),
-                  const SizedBox(height: 12),
-                  _SourceBreakdownCard(
+            Widget buildWidget(DashboardWidgetType type) {
+              if (settingsState.hiddenWidgets.contains(type)) {
+                return const SizedBox.shrink();
+              }
+              switch (type) {
+                case DashboardWidgetType.metrics:
+                  return _MetricsRow(state: state);
+                case DashboardWidgetType.breakdown:
+                  return _SourceBreakdownCard(
                     expenses: state.expenses,
                     focusMonth: state.focusMonth,
                     displayCurrency: state.displayCurrency,
@@ -173,20 +172,20 @@ class _ExpenseDashboardView extends StatelessWidget {
                     eurToInr: null,
                     cards: cardState.cards,
                     accounts: accountState.items,
-                  ),
-                  const SizedBox(height: 12),
-                  _CardSpendPanel(
+                  );
+                case DashboardWidgetType.cardSpend:
+                  return _CardSpendPanel(
                     expenses: state.expenses,
                     displayCurrency: state.displayCurrency,
                     cards: cardState.cards,
                     eurToInr: null,
-                  ),
-                  const SizedBox(height: 12),
-                  _UsableBudgetCard(state: state),
-                  const SizedBox(height: 12),
-                  _ForecastCard(state: state),
-                  const SizedBox(height: 12),
-                  _RecurringPanel(
+                  );
+                case DashboardWidgetType.usableBudget:
+                  return _UsableBudgetCard(state: state);
+                case DashboardWidgetType.forecast:
+                  return _ForecastCard(state: state);
+                case DashboardWidgetType.recurring:
+                  return _RecurringPanel(
                     state: state,
                     onAddRecurring: () => _openRecurringSheet(context),
                     onAddSubscription: () => _openSubscriptionSheet(context),
@@ -195,26 +194,46 @@ class _ExpenseDashboardView extends StatelessWidget {
                     onDeleteRecurring: (tx) => _confirmDeleteRecurring(context, tx),
                     onDeleteSubscription: (sub) => _confirmDeleteSubscription(context, sub),
                     onRecordRecurring: (tx) => _recordRecurring(context, tx),
-                  ),
-                  const SizedBox(height: 12),
-                  _BurnChart(state: state),
-                  const SizedBox(height: 12),
-                  _AnomalyCard(state: state),
-                  const SizedBox(height: 12),
-                  _CategoryChart(state: state, categoryLabels: categoryLabels),
-                  const SizedBox(height: 12),
-                  _BudgetCard(state: state, categoryLabels: categoryLabels),
-                  const SizedBox(height: 12),
-                  _ExpenseList(
+                  );
+                case DashboardWidgetType.burnChart:
+                  return _BurnChart(state: state);
+                case DashboardWidgetType.anomalies:
+                  return _AnomalyCard(state: state);
+                case DashboardWidgetType.categoryChart:
+                  return _CategoryChart(state: state, categoryLabels: categoryLabels);
+                case DashboardWidgetType.budgetCard:
+                  return _BudgetCard(state: state, categoryLabels: categoryLabels);
+                case DashboardWidgetType.recentExpenses:
+                  return _ExpenseList(
                     state: state,
                     cards: cardState.cards,
                     accounts: accountState.items,
                     categoryLabels: categoryLabels,
-                    onViewAll: () => _openAllExpenses(context, state, cardState.cards, accountState.items),
+                    onViewAll: () =>
+                        _openAllExpenses(context, state, cardState.cards, accountState.items),
                     onEdit: (expense) => _openExpenseForm(context, existing: expense),
                     onDelete: (expense) => _confirmDeleteExpense(context, expense),
                     onExport: () => _exportExpenses(context, state),
-                  ),
+                  );
+              }
+            }
+
+            return RefreshIndicator(
+              onRefresh: () => refreshAll(),
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
+                children: [
+                   const SizedBox(height: 12),
+                   ...settingsState.dashboardLayout.map((type) {
+                     final w = buildWidget(type);
+                     // Add spacing only if widget is visible
+                     if (w is SizedBox) return w; 
+                     return Padding(
+                       padding: const EdgeInsets.only(bottom: 12),
+                       child: w,
+                     );
+                   }),
                 ],
               ),
             );
@@ -871,45 +890,177 @@ class _MetricCard extends StatelessWidget {
   }
 }
 
-class _BurnChart extends StatelessWidget {
+enum _ChartPeriod { week, twoWeeks, month, year }
+
+class _BurnChart extends StatefulWidget {
   const _BurnChart({required this.state});
 
   final ExpenseState state;
 
   @override
-  Widget build(BuildContext context) {
-    return _MonthlyLineChart(
-      expenses: state.expenses,
-      focusMonth: state.focusMonth,
-      displayCurrency: state.displayCurrency,
-      budgetToEur: state.budgetToEur,
-    );
-  }
+  State<_BurnChart> createState() => _BurnChartState();
 }
 
-class _MonthlyLineChart extends StatelessWidget {
-  const _MonthlyLineChart({required this.expenses, required this.focusMonth, required this.displayCurrency, this.budgetToEur});
-
-  final List<Expense> expenses;
-  final DateTime focusMonth;
-  final String displayCurrency;
-  final double? budgetToEur;
+class _BurnChartState extends State<_BurnChart> {
+  _ChartPeriod _period = _ChartPeriod.month;
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime(focusMonth.year, focusMonth.month, 1);
-    final months = List.generate(6, (i) => DateTime(now.year, now.month - (5 - i), 1));
-    final values = <double>[];
-    for (final m in months) {
-      final start = DateTime(m.year, m.month, 1);
-      final end = DateTime(m.year, m.month + 1, 0, 23, 59, 59);
-      final total = expenses
-          .where((e) => !e.date.isBefore(start) && !e.date.isAfter(end))
-          .fold<double>(0, (sum, e) => sum + _amount(e));
-      values.add(total);
+    // 1. Determine date range (Standardize to Mon-Sun, 1st-Last)
+    final now = DateTime.now();
+    DateTime start;
+    DateTime end;
+    
+    switch (_period) {
+      case _ChartPeriod.week:
+        // Current Week (Mon - Sun)
+        // ISO 8601: Mon=1, Sun=7
+        final offsetToMon = now.weekday - 1; 
+        start = now.subtract(Duration(days: offsetToMon));
+        start = DateTime(start.year, start.month, start.day);
+        end = start.add(const Duration(days: 6, hours: 23, minutes: 59, seconds: 59));
+        break;
+      case _ChartPeriod.twoWeeks:
+        // Current Week + Previous Week (14 days, Mon - Sun)
+        final offsetToMon = now.weekday - 1;
+        // Go back to Monday of this week, then back 7 more days
+        start = now.subtract(Duration(days: offsetToMon + 7));
+        start = DateTime(start.year, start.month, start.day);
+        // End is Sunday of current week
+        end = start.add(const Duration(days: 13, hours: 23, minutes: 59, seconds: 59));
+        break;
+      case _ChartPeriod.month:
+        // Current Month (1st - Last Day)
+        start = DateTime(now.year, now.month, 1);
+        // Last day calculation: 1st of next month minus 1 second
+        final nextMonth = DateTime(now.year, now.month + 1, 1);
+        end = nextMonth.subtract(const Duration(seconds: 1));
+        break;
+      case _ChartPeriod.year:
+        // Current Year (Jan 1 - Dec 31)
+        start = DateTime(now.year, 1, 1);
+        end = DateTime(now.year, 12, 31, 23, 59, 59);
+        break;
     }
 
-    final maxY = ((values.isNotEmpty ? values.reduce((a, b) => a > b ? a : b) : 0).clamp(0, double.infinity) as double) + 50;
+    // 2. Prepare Data Slots (Zero-fill)
+    final barGroups = <BarChartGroupData>[];
+    final labels = <int, String>{};
+    double maxY = 0;
+
+    if (_period == _ChartPeriod.year) {
+      // Monthly aggregation (12 months)
+      // Initialize map for 1..12
+      final monthlyTotals = <int, double>{};
+      for (int i = 1; i <= 12; i++) monthlyTotals[i] = 0.0;
+
+      // Aggregate
+      for (final e in widget.state.expenses) {
+        if (e.date.year == now.year && e.transactionType != 'transfer') {
+             monthlyTotals[e.date.month] = (monthlyTotals[e.date.month] ?? 0) + _amount(e);
+        }
+      }
+
+      // Build bars
+      for (int i = 1; i <= 12; i++) {
+        final total = monthlyTotals[i]!;
+        if (total > maxY) maxY = total;
+        
+        barGroups.add(
+          BarChartGroupData(
+            x: i,
+            barRods: [
+              BarChartRodData(
+                toY: total,
+                color: Colors.indigo,
+                width: 12,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                backDrawRodData: BackgroundBarChartRodData(show: false),
+              ),
+            ],
+          ),
+        );
+
+        // Odds: Jan, Mar, May...
+        if (i % 2 != 0) {
+           labels[i] = DateFormat.MMM().format(DateTime(now.year, i));
+        }
+      }
+    } else {
+      // Daily aggregation
+      final totalDays = end.difference(start).inDays + 1;
+      
+      // Initialize map for dayOffset -> total
+      final dailyTotals = <int, double>{};
+      for (int i = 0; i < totalDays; i++) dailyTotals[i] = 0.0;
+
+      // Filter and Aggregate
+      for (final e in widget.state.expenses) {
+        if (e.transactionType != 'transfer' && 
+            !e.date.isBefore(start) && 
+            !e.date.isAfter(end)) {
+          // Calculate offset from start (in days)
+          final dayOffset = DateTime(e.date.year, e.date.month, e.date.day)
+              .difference(DateTime(start.year, start.month, start.day))
+              .inDays;
+          if (dayOffset >= 0 && dayOffset < totalDays) {
+            dailyTotals[dayOffset] = (dailyTotals[dayOffset] ?? 0) + _amount(e);
+          }
+        }
+      }
+
+      // Build bars
+      for (int i = 0; i < totalDays; i++) {
+        final total = dailyTotals[i]!;
+        if (total > maxY) maxY = total;
+
+        barGroups.add(
+          BarChartGroupData(
+            x: i,
+            barRods: [
+              BarChartRodData(
+                toY: total,
+                color: Colors.indigo,
+                width: _period == _ChartPeriod.month ? 6 : 12, // Thinner bars for month view
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+              ),
+            ],
+          ),
+        );
+
+        // Labels
+        final date = start.add(Duration(days: i));
+        if (_period == _ChartPeriod.week) {
+          labels[i] = DateFormat.E().format(date); 
+        } else if (_period == _ChartPeriod.twoWeeks) {
+           if (date.weekday == DateTime.monday) {
+             labels[i] = DateFormat.Md().format(date);
+           }
+        } else if (_period == _ChartPeriod.month) {
+           if (date.day == 1 || date.day % 5 == 0) {
+              labels[i] = '${date.day}';
+           }
+        }
+      }
+    }
+
+    maxY = (maxY * 1.2).clamp(50, double.infinity) as double;
+
+    String title;
+    switch (_period) {
+      case _ChartPeriod.week:
+        title = 'This Week';
+        break;
+      case _ChartPeriod.twoWeeks:
+        title = 'Last 2 Weeks';
+        break;
+      case _ChartPeriod.month:
+        title = 'This Month';
+        break;
+      case _ChartPeriod.year:
+        title = 'Annual';
+        break;
+    }
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -919,13 +1070,40 @@ class _MonthlyLineChart extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('6-month burn', style: Theme.of(context).textTheme.titleMedium),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.titleMedium),
+                PopupMenuButton<_ChartPeriod>(
+                  icon: const Icon(Icons.more_horiz),
+                  onSelected: (p) => setState(() => _period = p),
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: _ChartPeriod.week,
+                      child: Text('Last 1 week'),
+                    ),
+                    const PopupMenuItem(
+                      value: _ChartPeriod.twoWeeks,
+                      child: Text('Last 2 weeks'),
+                    ),
+                    const PopupMenuItem(
+                      value: _ChartPeriod.month,
+                      child: Text('Current month'),
+                    ),
+                    const PopupMenuItem(
+                      value: _ChartPeriod.year,
+                      child: Text('Annual'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
             Divider(color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.2), thickness: 2),
             const SizedBox(height: 24),
             SizedBox(
               height: 200,
-              child: LineChart(
-                LineChartData(
+              child: BarChart(
+                BarChartData(
                   minY: 0,
                   maxY: maxY,
                   gridData: const FlGridData(show: true, drawVerticalLine: false),
@@ -935,26 +1113,23 @@ class _MonthlyLineChart extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
+                        interval: 1, 
                         getTitlesWidget: (value, meta) {
-                          final index = value.toInt();
-                          if (index < 0 || index >= months.length) return const SizedBox.shrink();
-                          return Text(DateFormat.MMM().format(months[index]), style: const TextStyle(fontSize: 10));
+                          final i = value.toInt();
+                          if (labels.containsKey(i)) {
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Text(labels[i]!, style: const TextStyle(fontSize: 10)),
+                            );
+                          }
+                          return const SizedBox.shrink();
                         },
                       ),
                     ),
                     rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                     topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   ),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: [for (var i = 0; i < values.length; i++) FlSpot(i.toDouble(), values[i])],
-                      color: Colors.indigo,
-                      isCurved: true,
-                      barWidth: 3,
-                      dotData: const FlDotData(show: false),
-                      belowBarData: BarAreaData(show: true, color: Colors.indigo.withOpacity(0.15)),
-                    ),
-                  ],
+                  barGroups: barGroups,
                 ),
               ),
             ),
@@ -966,7 +1141,9 @@ class _MonthlyLineChart extends StatelessWidget {
 
   double _amount(Expense expense) {
     if (expense.transactionType == 'transfer') return 0;
-    return amountInDisplayCurrency(expense, displayCurrency, budgetToEur);
+    // Assuming context-based currency state if needed, or keeping existing logic
+    // Using simple lookup for now as existing code does
+    return amountInDisplayCurrency(expense, widget.state.displayCurrency, widget.state.budgetToEur);
   }
 }
 

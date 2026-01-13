@@ -10,11 +10,12 @@ import 'package:rupy/services/notification_service.dart';
 import 'package:rupy/services/error_reporter.dart';
 import 'package:rupy/settings/settings_repository.dart';
 import 'package:rupy/settings/settings_state.dart';
+import 'package:rupy/settings/models/dashboard_widget_type.dart';
 import 'package:rupy/theme/theme_contrast.dart';
 import 'package:rupy/services/firestore_config.dart';
 import 'package:rupy/utils/error_mapper.dart';
 
-class SettingsCubit extends Cubit<SettingsState> {
+ class SettingsCubit extends Cubit<SettingsState> {
   SettingsCubit({
     SettingsRepository? repository,
     SettingsState? initialState,
@@ -150,6 +151,48 @@ class SettingsCubit extends Cubit<SettingsState> {
           error: errorMessage(e, action: 'Update card reminders'),
         ),
       );
+    }
+  }
+ 
+  Future<void> updateDashboardLayout(List<DashboardWidgetType> layout) async {
+    emit(state.copyWith(dashboardLayout: layout, error: null));
+    try {
+      await _repository.saveDashboardLayout(
+        layout,
+        state.hiddenWidgets,
+      );
+      await _persistUserSettings({
+        'dashboardLayout': layout.map((e) => e.name).toList(),
+      });
+    } catch (e, stack) {
+      await ErrorReporter.recordError(e, stack, reason: 'Save dashboard layout failed');
+      emit(state.copyWith(error: errorMessage(e, action: 'Save dashboard layout')));
+    }
+  }
+
+  Future<void> toggleWidgetVisibility(
+    DashboardWidgetType widget,
+    bool isVisible,
+  ) async {
+    final hidden = Set<DashboardWidgetType>.from(state.hiddenWidgets);
+    if (isVisible) {
+      hidden.remove(widget);
+    } else {
+      hidden.add(widget);
+    }
+    emit(state.copyWith(hiddenWidgets: hidden, error: null));
+
+    try {
+      await _repository.saveDashboardLayout(
+        state.dashboardLayout,
+        hidden,
+      );
+      await _persistUserSettings({
+        'hiddenWidgets': hidden.map((e) => e.name).toList(),
+      });
+    } catch (e, stack) {
+      await ErrorReporter.recordError(e, stack, reason: 'Save widget visibility failed');
+      emit(state.copyWith(error: errorMessage(e, action: 'Save widget visibility')));
     }
   }
 

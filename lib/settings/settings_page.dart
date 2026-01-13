@@ -11,7 +11,9 @@ import 'package:rupy/services/error_reporter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsPage extends StatelessWidget {
+import 'package:rupy/settings/dashboard_layout_page.dart';
+
+ class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
@@ -138,6 +140,21 @@ class SettingsPage extends StatelessWidget {
               //     ),
               //   ],
               // ),
+              _SettingsSection(
+                title: 'Customization',
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.dashboard_customize_outlined),
+                    title: const Text('Dashboard layout'),
+                    subtitle: const Text('Reorder and hide dashboard items'),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const DashboardLayoutPage()),
+                      );
+                    },
+                  ),
+                ],
+              ),
               _SettingsSection(
                 title: 'Categories',
                 children: [
