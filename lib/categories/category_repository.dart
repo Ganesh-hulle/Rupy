@@ -64,6 +64,12 @@ class CategoryRepository {
     });
   }
 
+  Future<void> deleteCategory(String id) async {
+    final uid = _uid;
+    if (uid == null) return;
+    await _categoriesRef(uid).doc(id).delete();
+  }
+
   String _slug(String name) {
     final sanitized =
         name.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '_');

@@ -90,4 +90,20 @@ class CategoryCubit extends Cubit<CategoryState> {
       );
     }
   }
+  Future<void> deleteCategory(String id) async {
+    emit(state.copyWith(loading: true, error: null));
+    try {
+      await _repository.deleteCategory(id);
+      final items = await _repository.fetchCategories();
+      emit(state.copyWith(loading: false, items: items));
+    } catch (e, stack) {
+      await ErrorReporter.recordError(e, stack, reason: 'Delete category failed');
+      emit(
+        state.copyWith(
+          loading: false,
+          error: errorMessage(e, action: 'Delete category'),
+        ),
+      );
+    }
+  }
 }

@@ -30,6 +30,7 @@ import 'package:rupy/expenses/view/widgets/subscription_sheet.dart';
 import 'package:rupy/accounts/models/account_credential.dart';
 import 'package:rupy/cards/models/credit_card.dart';
 import 'package:rupy/config/app_config.dart';
+import 'package:rupy/utils/category_color.dart';
 import 'package:rupy/settings/settings_cubit.dart';
 import 'package:rupy/settings/settings_state.dart';
 import 'package:rupy/settings/models/dashboard_widget_type.dart';
@@ -1209,7 +1210,7 @@ class _CategoryPieChart extends StatelessWidget {
                       PieChartSectionData(
                         value: items[i].value,
                         title: '${((items[i].value / total) * 100).toStringAsFixed(0)}%',
-                        color: Colors.primaries[i % Colors.primaries.length],
+                        color: getCategoryColor(items[i].key),
                         radius: 70,
                         titleStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                       ),
@@ -1224,7 +1225,7 @@ class _CategoryPieChart extends StatelessWidget {
               children: [
                 for (var i = 0; i < items.length; i++)
                   Chip(
-                    avatar: CircleAvatar(backgroundColor: Colors.primaries[i % Colors.primaries.length]),
+                    avatar: CircleAvatar(backgroundColor: getCategoryColor(items[i].key)),
                     label: Text('${_categoryLabel(items[i].key, categoryLabels)} - ${items[i].value.toStringAsFixed(0)}'),
                   ),
               ],
@@ -1562,8 +1563,8 @@ class _ExpenseList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      backgroundColor: Colors.primaries[items[i].category.hashCode % Colors.primaries.length].withOpacity(0.15),
-                      child: Icon(Icons.label, color: Colors.primaries[items[i].category.hashCode % Colors.primaries.length]),
+                      backgroundColor: getCategoryColor(items[i].category).withOpacity(0.15),
+                      child: Icon(Icons.label, color: getCategoryColor(items[i].category)),
                     ),
                     const SizedBox(width: 12),
                     Expanded(

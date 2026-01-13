@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:rupy/settings/dashboard_layout_page.dart';
+import 'package:rupy/settings/category_settings_page.dart';
 
  class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -153,33 +154,25 @@ import 'package:rupy/settings/dashboard_layout_page.dart';
                       );
                     },
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.category_outlined),
+                    title: const Text('Categories'),
+                    subtitle: const Text('Manage expense categories'),
+                    onTap: () {
+                      final cubit = context.read<CategoryCubit>();
+                       Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: cubit,
+                            child: const CategorySettingsPage(),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
-              _SettingsSection(
-                title: 'Categories',
-                children: [
-                  if (categoriesState.items.isEmpty)
-                    ListTile(
-                      leading: const Icon(Icons.playlist_add_outlined),
-                      title: const Text('Add default categories'),
-                      subtitle: const Text('Populate common categories for expenses'),
-                      trailing: categoriesState.loading
-                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                          : null,
-                      onTap: categoriesState.loading ? null : () => context.read<CategoryCubit>().addDefaultCategories(),
-                    )
-                  else
-                    ListTile(
-                      leading: const Icon(Icons.add_circle_outline),
-                      title: const Text('Add a custom category'),
-                      subtitle: const Text('Add a new label with an optional emoji'),
-                      trailing: categoriesState.loading
-                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                          : null,
-                      onTap: categoriesState.loading ? null : () => _promptAddCategory(context),
-                    ),
-                ],
-              ),
+              // Old Category Section Removed for New Customization Layout
               _SettingsSection(
                 title: 'Security',
                 children: [
@@ -340,58 +333,7 @@ import 'package:rupy/settings/dashboard_layout_page.dart';
     }
   }
 
-  Future<void> _promptAddCategory(BuildContext context) async {
-    final nameCtrl = TextEditingController();
-    final emojiCtrl = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
-    final shouldSave =
-        await showDialog<bool>(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            title: const Text('Add category'),
-            content: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextFormField(
-                    controller: nameCtrl,
-                    decoration: const InputDecoration(labelText: 'Category name'),
-                    textCapitalization: TextCapitalization.words,
-                    validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: emojiCtrl,
-                    decoration: const InputDecoration(labelText: 'Emoji (optional)', hintText: 'e.g. 🍔'),
-                  ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Cancel')),
-              FilledButton(
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) return;
-                  Navigator.of(ctx).pop(true);
-                },
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-        ) ??
-        false;
-
-    if (shouldSave && context.mounted) {
-      final name = nameCtrl.text.trim();
-      final emoji = emojiCtrl.text.trim();
-      await context.read<CategoryCubit>().addCategory(name: name, emoji: emoji.isEmpty ? '' : emoji);
-    }
-
-    nameCtrl.dispose();
-    emojiCtrl.dispose();
-  }
+  // _promptAddCategory removed as it is now in CategorySettingsPage
 
   Future<void> _openRepo(BuildContext context, Uri url) async {
     try {
