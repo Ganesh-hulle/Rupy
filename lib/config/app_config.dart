@@ -1,7 +1,7 @@
 class AppConfig {
-  static const String baseCurrency = 'EUR';
+  static const String baseCurrency = 'INR';
   static const String secondaryCurrency = 'INR';
-  static const bool enableSecondaryCurrency = true;
+  static const bool enableSecondaryCurrency = false;
 
   static List<String> get supportedCurrencies =>
       enableSecondaryCurrency ? [baseCurrency, secondaryCurrency] : [baseCurrency];

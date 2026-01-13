@@ -41,7 +41,7 @@ class _RecurringTransactionSheetState
     final existing = widget.existing;
     _startDate = existing?.startDate ?? DateTime.now();
     _frequency = existing?.frequency ?? RecurrenceFrequency.monthly;
-    _currency = existing?.currency ?? widget.defaultCurrency;
+    _currency = 'INR';
     _category = existing?.category ?? '';
     _active = existing?.active ?? true;
     _intervalCtrl.text = (existing?.interval ?? 1).toString();
@@ -151,18 +151,10 @@ class _RecurringTransactionSheetState
                 },
               ),
               const SizedBox(height: 8),
-              DropdownButtonFormField<String>(
-                value: _currency,
+              TextFormField(
+                initialValue: 'INR',
+                readOnly: true,
                 decoration: const InputDecoration(labelText: 'Currency'),
-                items: AppConfig.supportedCurrencies
-                    .map(
-                      (c) => DropdownMenuItem(
-                        value: c,
-                        child: Text(c),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (v) => setState(() => _currency = v ?? _currency),
               ),
               const SizedBox(height: 8),
               if (categories.isEmpty)

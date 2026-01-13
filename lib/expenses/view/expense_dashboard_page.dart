@@ -160,7 +160,8 @@ class _ExpenseDashboardView extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 120),
                 children: [
-                  _ForexBadge(rate: state.eurToInr),
+                  // _ForexBadge removed
+                  const SizedBox(height: 12),
                   const SizedBox(height: 12),
                   _MetricsRow(state: state),
                   const SizedBox(height: 12),
@@ -168,8 +169,8 @@ class _ExpenseDashboardView extends StatelessWidget {
                     expenses: state.expenses,
                     focusMonth: state.focusMonth,
                     displayCurrency: state.displayCurrency,
-                    budgetToEur: state.budgetToEur,
-                    eurToInr: state.eurToInr,
+                    budgetToEur: null,
+                    eurToInr: null,
                     cards: cardState.cards,
                     accounts: accountState.items,
                   ),
@@ -178,7 +179,7 @@ class _ExpenseDashboardView extends StatelessWidget {
                     expenses: state.expenses,
                     displayCurrency: state.displayCurrency,
                     cards: cardState.cards,
-                    eurToInr: state.eurToInr,
+                    eurToInr: null,
                   ),
                   const SizedBox(height: 12),
                   _UsableBudgetCard(state: state),
@@ -448,37 +449,7 @@ class _ExpenseDashboardView extends StatelessWidget {
   }
 }
 
-class _ForexBadge extends StatelessWidget {
-  const _ForexBadge({required this.rate});
-
-  final double? rate;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final text = rate == null
-        ? 'Fetching ${AppConfig.baseCurrency} to ${AppConfig.secondaryCurrency}...'
-        : '${AppConfig.baseCurrency} to ${AppConfig.secondaryCurrency} today: ${rate!.toStringAsFixed(2)}';
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(14)),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.currency_exchange, color: colorScheme.onPrimaryContainer, size: 18),
-            const SizedBox(width: 8),
-            Text(
-              text,
-              style: TextStyle(color: colorScheme.onPrimaryContainer, fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// _ForexBadge class removed
 
 class _UsableBudgetCard extends StatelessWidget {
   const _UsableBudgetCard({required this.state});
@@ -495,18 +466,6 @@ class _UsableBudgetCard extends StatelessWidget {
     final range = budget == null
         ? 'No budget set'
         : '${DateFormat.MMMd().format(budget.startDate)} - ${DateFormat.MMMd().format(budget.endDate)}';
-    final budgetToEur = state.budgetToEur ?? (currency == AppConfig.baseCurrency ? 1.0 : null);
-    final altCurrency = alternateCurrency(currency);
-    final altFmt = altCurrency != null ? NumberFormat.simpleCurrency(name: altCurrency) : null;
-    double? altAmount() {
-      if (altFmt == null) return null;
-      return convertToAlternateCurrency(
-        amount: usable,
-        currency: currency,
-        baseToSecondaryRate: state.eurToInr,
-        currencyToBaseRate: budgetToEur,
-      );
-    }
 
     return Card(
       child: Padding(
@@ -532,11 +491,6 @@ class _UsableBudgetCard extends StatelessWidget {
                     budget == null ? '-' : fmt.format(usable),
                     style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
                   ),
-                  if (budget != null && altAmount() != null && altFmt != null)
-                    Text(
-                      '~ ${altFmt.format(altAmount())} today',
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                    ),
                 ],
               ),
             ),

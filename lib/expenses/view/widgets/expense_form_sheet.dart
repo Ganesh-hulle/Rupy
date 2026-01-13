@@ -45,8 +45,7 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
           : '',
     );
     _noteCtrl = TextEditingController(text: widget.existing?.note ?? '');
-    final baseCurrency = context.read<SettingsCubit>().state.baseCurrency;
-    _currency = widget.existing?.currency ?? baseCurrency;
+    _currency = 'INR';
     _category = widget.existing?.category ?? '';
     _date = widget.existing?.date ?? DateTime.now();
     _paymentSourceType = widget.existing?.paymentSourceType ?? 'cash';
@@ -132,16 +131,11 @@ class _ExpenseFormSheetState extends State<ExpenseFormSheet> {
                     ),
                   ),
                   const SizedBox(width: 10),
+                  // Currency forced to INR
                   Expanded(
-                    child: DropdownButtonFormField<String>(
-                      key: const Key('expense_currency_dropdown'),
-                      value: _currency,
-                      items: AppConfig.supportedCurrencies
-                          .map(
-                            (c) => DropdownMenuItem(value: c, child: Text(c)),
-                          )
-                          .toList(),
-                      onChanged: (v) => setState(() => _currency = v ?? _currency),
+                    child: TextFormField(
+                      initialValue: 'INR',
+                      readOnly: true,
                       decoration: const InputDecoration(labelText: 'Currency'),
                     ),
                   ),
