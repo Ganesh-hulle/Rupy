@@ -108,6 +108,7 @@ class rupyApp extends StatelessWidget {
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, settings) {
             return MaterialApp(
+              debugShowCheckedModeBanner: false,
               title: 'rupy',
               theme: AppTheme.light(
                 context,
