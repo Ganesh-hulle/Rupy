@@ -95,6 +95,24 @@ class ExpenseRepository {
     });
   }
 
+  Future<void> deletePlannedExpense(
+    String budgetId,
+    String plannedExpenseId,
+  ) async {
+    final uid = _uid;
+    if (uid == null) return;
+    final budgets = _budgetsRef(uid);
+    await _firestore.runTransaction((tx) async {
+      final docRef = budgets.doc(budgetId);
+      final snap = await tx.get(docRef);
+      final data = snap.data() ?? {};
+      final planned = (data['plannedExpenses'] as List?) ?? [];
+      final updated =
+          planned.where((p) => p['id'] != plannedExpenseId).toList();
+      tx.set(docRef, {...data, 'plannedExpenses': updated});
+    });
+  }
+
   Future<List<RecurringTransaction>> fetchRecurringTransactions() async {
     final uid = _uid;
     if (uid == null) return [];

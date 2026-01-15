@@ -1379,9 +1379,13 @@ class _BudgetCard extends StatelessWidget {
                             ? DateFormat.MMMd().format(p.dueDate)
                             : '${DateFormat.MMMd().format(p.dueDate)} - $categoryLabel',
                       ),
-                      trailing: altValue == null || altFmt == null
-                          ? Text(fmt.format(p.amount))
-                          : Column(
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (altValue == null || altFmt == null)
+                            Text(fmt.format(p.amount))
+                          else
+                            Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
@@ -1394,6 +1398,14 @@ class _BudgetCard extends StatelessWidget {
                                 ),
                               ],
                             ),
+                          const SizedBox(width: 4),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline, size: 20),
+                            onPressed: () => _confirmDeletePlannedExpense(context, budget.id, p),
+                            tooltip: 'Delete',
+                          ),
+                        ],
+                      ),
                     );
                   }).toList(),
                 ),
@@ -1426,6 +1438,25 @@ class _BudgetCard extends StatelessWidget {
     if (result != null) {
       // ignore: use_build_context_synchronously
       context.read<ExpenseBloc>().add(AddPlannedExpense(budgetId: budgetId, expense: result));
+    }
+  }
+  Future<void> _confirmDeletePlannedExpense(BuildContext context, String budgetId, PlannedExpense expense) async {
+    final shouldDelete =
+        await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Delete future expense'),
+            content: Text('Remove "${expense.title}"?'),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+              FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Delete')),
+            ],
+          ),
+        ) ??
+        false;
+    if (shouldDelete) {
+      // ignore: use_build_context_synchronously
+      context.read<ExpenseBloc>().add(DeletePlannedExpense(budgetId: budgetId, plannedExpenseId: expense.id));
     }
   }
 }

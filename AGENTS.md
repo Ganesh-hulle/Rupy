@@ -1,4 +1,4 @@
-# AI Agent Guide (Morpheus)
+# AI Agent Guide (Rupy)
 
 This guide helps AI coding agents understand the project, architecture, and workflows. Read before making changes.
 
@@ -12,7 +12,7 @@ Build an industry-standard finance app with modular, maintainable code and a cle
 - Avoid removing unrelated changes in a dirty worktree.
 
 ## Project Overview
-Morpheus is a Flutter finance companion with:
+Rupy is a Flutter finance companion with:
 - Expenses, budgets, accounts, and credit card management.
 - Bills calendar and recurring transaction tracking.
 - Subscriptions and planned expenses management.
@@ -24,6 +24,7 @@ Morpheus is a Flutter finance companion with:
 - Monthly snapshots for per-card utilization summaries.
 - Optional secondary currency display (base/secondary defined in config).
 - Error reporting via Sentry and Firebase Crashlytics.
+- \*\*Theme\*\*: Custom White+Orange (Light) and Black+Orange (Dark) visual identity.
 
 ## Tech Stack
 - Flutter (Dart 3.38+), Material 3 UI.
@@ -288,7 +289,7 @@ dart run build_runner build --delete-conflicting-outputs
 - When adding collections, update rules and required indexes.
 
 ## Local Storage (SQLite)
-- File: `morpheus.db` via `sqflite`.
+- File: `rupy.db` via `sqflite`.
 - Table: `credit_cards` caches card data for offline use.
 - Bank icons come from bundled SQLite: `assets/tables/banks.sqlite`.
 - Cache scope: cards are cached per-user. On uid change, the local card cache is cleared and refilled from Firestore.

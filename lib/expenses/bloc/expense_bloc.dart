@@ -34,6 +34,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
     on<DeleteExpense>(_onDeleteExpense);
     on<SaveBudget>(_onSaveBudget);
     on<AddPlannedExpense>(_onAddPlannedExpense);
+    on<DeletePlannedExpense>(_onDeletePlannedExpense);
     on<ChangeMonth>(_onChangeMonth);
     on<SetBaseCurrency>(_onSetBaseCurrency);
     on<SaveRecurringTransaction>(_onSaveRecurringTransaction);
@@ -219,6 +220,43 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         state.copyWith(
           loading: false,
           error: errorMessage(e, action: 'Add planned expense'),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onDeletePlannedExpense(
+    DeletePlannedExpense event,
+    Emitter<ExpenseState> emit,
+  ) async {
+    emit(state.copyWith(loading: true, error: null));
+    try {
+      await _repository.deletePlannedExpense(
+        event.budgetId,
+        event.plannedExpenseId,
+      );
+      final updatedBudgets =
+          state.budgets.map((b) {
+            if (b.id == event.budgetId) {
+              final planned =
+                  b.plannedExpenses
+                      .where((p) => p.id != event.plannedExpenseId)
+                      .toList();
+              return b.copyWith(plannedExpenses: planned);
+            }
+            return b;
+          }).toList();
+      emit(_recompute(state.expenses, updatedBudgets, state.focusMonth));
+    } catch (e, stack) {
+      await ErrorReporter.recordError(
+        e,
+        stack,
+        reason: 'Delete planned expense failed',
+      );
+      emit(
+        state.copyWith(
+          loading: false,
+          error: errorMessage(e, action: 'Delete planned expense'),
         ),
       );
     }

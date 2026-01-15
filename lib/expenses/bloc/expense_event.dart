@@ -57,6 +57,19 @@ class AddPlannedExpense extends ExpenseEvent {
   List<Object?> get props => [budgetId, expense];
 }
 
+class DeletePlannedExpense extends ExpenseEvent {
+  const DeletePlannedExpense({
+    required this.budgetId,
+    required this.plannedExpenseId,
+  });
+
+  final String budgetId;
+  final String plannedExpenseId;
+
+  @override
+  List<Object?> get props => [budgetId, plannedExpenseId];
+}
+
 class ChangeMonth extends ExpenseEvent {
   const ChangeMonth(this.month);
 
